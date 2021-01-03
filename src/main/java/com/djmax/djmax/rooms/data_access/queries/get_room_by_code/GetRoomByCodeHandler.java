@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-public class GetRoomByCodeHandler implements IQueryHandler<Optional<RoomReadModelDTO>> {
+public class GetRoomByCodeHandler implements IQueryHandler<Optional<RoomReadModelDTO>, GetRoomByCodeQuery> {
 
     @Autowired
     private IRoomRepository repository;
@@ -19,7 +19,7 @@ public class GetRoomByCodeHandler implements IQueryHandler<Optional<RoomReadMode
     @Autowired
     private RoomDTOFactory factory;
 
-    public Optional<RoomReadModelDTO> execute(IQuery query) {
-        return repository.getByCode(((GetRoomByCodeQuery)query).getRoomCode()).map((room) -> factory.produceDTO(room));
+    public Optional<RoomReadModelDTO> execute(GetRoomByCodeQuery query) {
+        return repository.getByCode(query.getRoomCode()).map((room) -> factory.produceDTO(room));
     }
 }

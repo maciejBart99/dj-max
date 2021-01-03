@@ -52,11 +52,11 @@ public class RoomsController {
 
     @GetMapping("{id}")
     public ResponseEntity<Optional<RoomReadModelDTO>> getRoom(@PathVariable() long id) throws Exception {
-        return new ResponseEntity<Optional<RoomReadModelDTO>>(queryMediator.<GetRoomQuery, RoomReadModelDTO>dispatch(new GetRoomQuery(id)), HttpStatus.OK);
+        return new ResponseEntity<Optional<RoomReadModelDTO>>(queryMediator.<Optional<RoomReadModelDTO>, GetRoomQuery>dispatch(new GetRoomQuery(id)), HttpStatus.OK);
     }
 
     @GetMapping("code/{code}")
     public ResponseEntity<Optional<RoomReadModelDTO>> getRoom(@PathVariable() String code) throws Exception {
-        return new ResponseEntity<Optional<RoomReadModelDTO>>(queryMediator.<GetRoomByCodeQuery, RoomReadModelDTO>dispatch(new GetRoomByCodeQuery(code)), HttpStatus.OK);
+        return new ResponseEntity<Optional<RoomReadModelDTO>>(queryMediator.<Optional<RoomReadModelDTO>, GetRoomByCodeQuery>dispatch(new GetRoomByCodeQuery(code)), HttpStatus.OK);
     }
 }

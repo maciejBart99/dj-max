@@ -7,14 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class RemoveRoomHandler implements ICommandHandler {
+public class RemoveRoomHandler implements ICommandHandler<RemoveRoomCommand> {
 
     @Autowired
     private IRoomRepository repository;
 
     @Override
-    public void execute(ICommand cmd) {
-        RemoveRoomCommand command = (RemoveRoomCommand)cmd;
+    public void execute(RemoveRoomCommand command) {
         repository.deleteById(command.getId());
     }
 }

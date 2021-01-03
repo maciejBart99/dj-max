@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-public class AddItemHandler implements ICommandHandler {
+public class AddItemHandler implements ICommandHandler<AddItemCommand> {
 
     @Autowired
     private IRoomRepository roomRepository;
@@ -26,8 +26,7 @@ public class AddItemHandler implements ICommandHandler {
     private SocketDispatcher socketDispatcher;
 
     @Override
-    public void execute(ICommand cmd) throws RoomNotFoundException {
-        AddItemCommand command = (AddItemCommand)cmd;
+    public void execute(AddItemCommand command) throws RoomNotFoundException {
         Optional<Room> room = roomRepository.findById(command.getRoomId());
         if (room.isEmpty()) throw new RoomNotFoundException(Long.toString(command.getRoomId()));
         QueueItem queueItem = new QueueItem(

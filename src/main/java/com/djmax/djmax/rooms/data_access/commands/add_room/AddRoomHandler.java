@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class AddRoomHandler implements ICommandHandler {
+public class AddRoomHandler implements ICommandHandler<AddRoomCommand> {
 
     @Autowired
     private IRoomRepository repository;
@@ -18,10 +18,8 @@ public class AddRoomHandler implements ICommandHandler {
     @Autowired
     private CodeService codeService;
 
-
     @Override
-    public void execute(ICommand cmd) {
-        AddRoomCommand command = (AddRoomCommand)cmd;
+    public void execute(AddRoomCommand command) {
         Room room = new Room(command.getName(),
                 codeService.generateCode(10),
                 command.getCreatorName(),

@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-public class RemoveItemHandler implements ICommandHandler {
+public class RemoveItemHandler implements ICommandHandler<RemoveItemCommand> {
 
     @Autowired
     private IQueueItemRepository repository;
@@ -23,8 +23,7 @@ public class RemoveItemHandler implements ICommandHandler {
     private SocketDispatcher socketDispatcher;
 
     @Override
-    public void execute(ICommand cmd) throws RoomNotFoundException {
-        RemoveItemCommand command = (RemoveItemCommand)cmd;
+    public void execute(RemoveItemCommand command) throws RoomNotFoundException {
         Optional<QueueItem> item = repository.findById(command.getId());
         if (item.isEmpty()) throw new RoomNotFoundException(Long.toString(command.getId()));
         socketDispatcher.dispatchItemDelete(item.get());

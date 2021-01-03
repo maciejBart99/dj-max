@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-public class EditRoomHandler implements ICommandHandler {
+public class EditRoomHandler implements ICommandHandler<EditRoomCommand> {
 
     @Autowired
     private IRoomRepository repository;
@@ -21,8 +21,7 @@ public class EditRoomHandler implements ICommandHandler {
     private SocketDispatcher socketDispatcher;
 
     @Override
-    public void execute(ICommand cmd) throws RoomNotFoundException {
-        EditRoomCommand command = (EditRoomCommand)cmd;
+    public void execute(EditRoomCommand command) throws RoomNotFoundException {
         Optional<Room> room = repository.findById(command.getId());
         if (room.isEmpty()) throw new RoomNotFoundException(Long.toString(command.getId()));
         Room roomEntity = room.get();

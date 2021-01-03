@@ -5,41 +5,20 @@ import com.djmax.djmax.shared.core.domain.interfaces.IQuery;
 import com.djmax.djmax.shared.core.domain.interfaces.IQueryHandler;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class QueryMediator {
 
-    private static class Entry {
-        private final Class<?> command;
-        private final IQueryHandler<?> handler;
+    private final Map<Class<? extends IQuery>, IQueryHandler<?, ? extends IQuery>> entries = new HashMap<>();
 
-        public Entry(Class<?> command, IQueryHandler<?> handler) {
-            this.command = command;
-            this.handler = handler;
-        }
-
-        public Class<?> getCommand() {
-            return command;
-        }
-
-        public IQueryHandler<?> getHandler() {
-            return handler;
-        }
+    public void addQueryHandler(Class<? extends IQuery> command, IQueryHandler<?, ? extends IQuery> handler) {
+        entries.put(command, handler);
     }
 
-    private final List<Entry> entries = new ArrayList<>();
-
-    public void addQueryHandler(Class<?> command, IQueryHandler<?> handler) {
-        entries.add(new Entry(command, handler));
-    }
-
-    public <T extends IQuery, P> Optional<P> dispatch(T command) throws HandlerNotRegisteredException, Exception {
-        Optional<Entry> iQueryHandler = entries.stream()
-                .filter(entry -> entry.getCommand() == command.getClass()).findFirst();
+    public <P, T extends IQuery> P dispatch(T command) throws HandlerNotRegisteredException {
+        Optional<IQueryHandler<P, T>> iQueryHandler = Optional.ofNullable((IQueryHandler<P, T>)entries.get(command.getClass()));
         if (iQueryHandler.isEmpty()) throw new HandlerNotRegisteredException();
-        return (Optional<P>) iQueryHandler.get().getHandler().execute(command);
+        return iQueryHandler.get().execute(command);
     }
 }
